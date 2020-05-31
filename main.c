@@ -123,7 +123,7 @@ run_conversion(char *content, int size)
 int main(int argc, char **argv)
 {
     if (argc < 2) {
-        print_err("No .j file specified");
+        print_err("no '.j' file specified");
         return 1;
     }
 

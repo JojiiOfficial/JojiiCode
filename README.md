@@ -3,7 +3,11 @@ A very (very very) small interpreted language written in C `without strings.h`. 
 
 # Compile 
 ```bash
-gcc main.c misc.c functions.c strutils.c -o jojiilang -O2
+automake --add-missing
+./configure
+make
+sudo make install
+
 ```
 
 # Run 
