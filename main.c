@@ -26,7 +26,7 @@ read_file(FILE *file, char **out)
     int sz = get_file_size(file);
     *out = (char*) malloc(sz);
     int read = fread(*out, sizeof(char), sz, file);
-    if (read != sz){
+    if (read != sz) {
         return -1;
     }
 
@@ -45,9 +45,11 @@ run_instruction(char *instruction, char *params)
 {
     if (charcmp(instruction, "Print")) {
         return print(params);
-    }else if (charcmp(instruction,"let")){
+    } else if (charcmp(instruction,"let")) {
         return vardef(params);
-    }else{
+    } else if (charcmp(instruction,"exec")) {
+        return run_system(params);
+    } else {
         printf("Undefined command '%s'\n", instruction);
         return 0;
     }
@@ -67,16 +69,16 @@ exec_instruction(char *instruction, int len)
 
     int isCMD = 1;
 
-    for (int i = 0; i < len; i++){
+    for (int i = 0; i < len; i++) {
         if (isCMD){
-            if (instruction[i] == ':'){
+            if (instruction[i] == ':') {
                 isCMD = 0;
                 continue;
-            }else {
+            } else {
                 cmd[i] = instruction[i];
             }
         } else {
-            if (instLen == -1 && instruction[i] == ' '){
+            if (instLen == -1 && instruction[i] == ' ') {
                 instLen = 0;
                 continue;
             }
@@ -98,17 +100,17 @@ run_conversion(char *content, int size)
     int currLine = 0;
 
     for (int i = 0; i < size; i++){
-        if (content[i] == ((char)10)){
+        if (content[i] == ((char)10)) {
             currLine++;
             // execute instruction. Exit on error
-            if (!exec_instruction(buff, buffSize)){
+            if (!exec_instruction(buff, buffSize)) {
                 print_line_error(currLine);
                 return 0;
             }
 
             // reset buffer after successful execution
             buffSize = 0;
-        }else {
+        } else {
             buff[buffSize] = content[i];
             buffSize++;
         }
@@ -130,10 +132,10 @@ int main(int argc, char **argv)
 
     char *content;
     int sz = read_file(file, &content);
-    if (sz == -1){
+    if (sz == -1) {
         printf("%s%d","Error reading file: ", errno);
         return 1; 
-    }else if (sz == 0){
+    } else if (sz == 0) {
         printf("File is empty");
         return 0;
     }
