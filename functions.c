@@ -13,7 +13,8 @@ print(char *args)
 int
 vardef(char *args)
 {
-    if (!charhas(args, '=')){
+    if (!charhas(args, '='))
+    {
         print_err("Missing '=' in var def");
         return 0;
     }
@@ -21,10 +22,13 @@ vardef(char *args)
     // try to get the name
     char *name = name_from_vardef(args);
 
-    if (name == NULL){
+    if (name == NULL)
+    {
         print_err("Invalid var definition!");
         return 0;
     }
+
+    printf("name: %s", name);
 
     return 1;
 }
