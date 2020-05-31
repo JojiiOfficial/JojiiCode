@@ -7,3 +7,10 @@ main
 configure
 Makefile
 .deps
+config.log
+config.status
+jojiilang
+compile
+install-sh
+depcomp
+missing

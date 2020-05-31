@@ -122,6 +122,11 @@ run_conversion(char *content, int size)
 
 int main(int argc, char **argv)
 {
+    if (argc < 2) {
+        print_err("No .j file specified");
+        return 1;
+    }
+
     FILE *file;
 
     file = fopen(argv[1], "rw");
