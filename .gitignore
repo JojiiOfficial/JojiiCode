@@ -1,3 +1,9 @@
 .vscode
 *.j
 main
+*.cache
+*.m4
+*.o
+configure
+Makefile
+.deps
