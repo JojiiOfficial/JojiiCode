@@ -1,1 +1,2 @@
-void print(char* args);
+int print(char* args);
+int vardef(char* args);

@@ -1,10 +1,10 @@
-#include <string.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include "functions.h"
 #include "strutils.h"
+#include "misc.h"
 
 extern int errno;
 
@@ -40,21 +40,23 @@ trim_char(char **c, int len)
     (*c)[len] = '\0';
 }
 
-void
+int
 run_instruction(char *instruction, char *params)
 {
     if (charcmp(instruction, "Print")) {
-        print(params);
-        return;
+        return print(params);
     }else if (charcmp(instruction,"let")){
-
+        return vardef(params);
     }else{
         printf("Undefined command '%s'\n", instruction);
+        return 0;
     }
+
+    return 1;
 }
 
 // convert single instruction
-void
+int
 exec_instruction(char *instruction, int len)
 {
     trim_char(&instruction, len);
@@ -84,25 +86,35 @@ exec_instruction(char *instruction, int len)
         }
     }
 
-    run_instruction(cmd, args);
+    return run_instruction(cmd, args);
 }
 
 // convert all instructions
-void
+int
 run_conversion(char *content, int size)
 {
     char *buff = (char *) malloc(500);
     int buffSize = 0;
+    int currLine = 0;
 
     for (int i = 0; i < size; i++){
         if (content[i] == ((char)10)){
-            exec_instruction(buff, buffSize);
+            currLine++;
+            // execute instruction. Exit on error
+            if (!exec_instruction(buff, buffSize)){
+                print_line_error(currLine);
+                return 0;
+            }
+
+            // reset buffer after successful execution
             buffSize = 0;
         }else {
             buff[buffSize] = content[i];
             buffSize++;
         }
     }
+    
+    return 1;
 }
 
 
